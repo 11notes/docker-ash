@@ -1,11 +1,11 @@
 const { spawn } = require('node:child_process');
 
-exports.dig = async(resolver, type, record) => {
+exports.dig = async(cmd) => {
   return(new Promise((resolve, reject) => {
-    const dig = spawn('/usr/bin/dig', ['+short', '+answer', type, record, `@${resolver}`]);
+    const dig = spawn('/usr/bin/dig', ['+short', '+answer', cmd]);
     const io = {stdout:'', stderr:''};
     dig.stderr.on('data', data => {io.stderr += data.toString()});
-    dig.stdout.on('data', data => {io.stderr += data.toString()});
+    dig.stdout.on('data', data => {io.stdout += data.toString()});
     dig.on('error', error => {reject(error)});
     dig.on('close', code =>{
       switch(true){

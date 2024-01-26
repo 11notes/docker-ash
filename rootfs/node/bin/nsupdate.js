@@ -8,7 +8,7 @@ exports.nsupdate = async(server, key, commands) => {
     const nsupdate = spawn('/usr/bin/nsupdate', ['-y', key]);
     const io = {stdout:'', stderr:''};
     nsupdate.stderr.on('data', data => {io.stderr += data.toString()});
-    nsupdate.stdout.on('data', data => {io.stdout += (data.toString()).replace(/[\r\n]*$/ig, '')});
+    nsupdate.stdout.on('data', data => {io.stdout += data.toString()});
     nsupdate.on('error', error => {reject(error)});
     nsupdate.on('close', code =>{
       if(code === 0){

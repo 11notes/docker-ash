@@ -8,19 +8,15 @@ class Router extends require(`/router`){
 
   routes(){
     this.router.get(`/${this.name}`, async(req, res, next) =>{
-      if(req?.body?.resolver){
-        if(req?.body?.type){
-          if(req?.body?.record){
-            const dig = await dig(req.body.resolver, req.body.type, req.body.record);
-            res.status(200).json({error:false, result:dig});
-          }else{
-            res.status(400).json({error:true, message:`property: record, can't be empty`});
-          }
-        }else{
-          res.status(400).json({error:true, message:`property: type, can't be empty`});
+      if(req?.body?.command){
+        try{
+          const dig = await dig(req.body.command);
+          res.status(200).json({error:false, result:dig});
+        }catch(e){
+          res.status(400).json({error:true, message:e.toString()});
         }
       }else{
-        res.status(400).json({error:true, message:`property: resolver, can't be empty`});
+        res.status(400).json({error:true, message:`property: command, can't be empty`});
       }
     });
   }
