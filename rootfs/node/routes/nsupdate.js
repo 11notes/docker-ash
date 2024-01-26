@@ -10,12 +10,12 @@ class Router extends require(`/router`){
     this.router.put(`/${this.name}`, async(req, res, next) =>{
       if(req?.body?.server){
         if(req?.body?.key){
-          const key = req?.body?.key; delete(req?.body?.key);
+          const key = req.body.key; delete(req.body.key);
           if(req?.body?.commands){
             if(Array.isArray(req.body.commands) && req?.body?.commands.length > 0){
               try{
-                await nsupdate(req?.body?.server, key, req?.body?.commands);
-                res.status(200).json({error:false, message:'success'});
+                await nsupdate(req.body.server, key, req.body.commands);
+                res.status(200).json({error:false, result:true});
               }catch(e){
                 res.status(400).json({error:true, message:e.toString()});
               }
