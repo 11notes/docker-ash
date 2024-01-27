@@ -1,4 +1,4 @@
-const { nsupdate } = require('/node/bin/dig');
+const { dig } = require('/node/bin/dig');
 
 class Router extends require(`/router`){
   constructor(name, express){
@@ -7,11 +7,11 @@ class Router extends require(`/router`){
   }
 
   routes(){
-    this.router.get(`/${this.name}`, async(req, res, next) =>{
+    this.router.put(`/${this.name}`, async(req, res, next) =>{
       if(req?.body?.command){
         try{
-          const dig = await dig(req.body.command);
-          res.status(200).json({error:false, result:dig});
+          const result = await dig(req.body.command);
+          res.status(200).json({error:false, result:result});
         }catch(e){
           res.status(400).json({error:true, message:e.toString()});
         }

@@ -1,9 +1,10 @@
 const fs = require('fs');
 const { Express } = require('/express');
 const express = require('express');
+const { elevenLogJSON } = require('/util');
 
-class NSUPDATE{
-  #auth = (process.env?.NSUPDATE_AUTH_BASIC || 'nsupdate:nsupdate');
+class Ash{
+  #auth;
   #app;
 
   constructor(){
@@ -13,19 +14,42 @@ class NSUPDATE{
       res.status(200).end();
     });
 
+    switch(true){
+      case process.env?.ASH_AUTH_BASIC:
+          this.#auth = process.env?.ASH_AUTH_BASIC;
+        break;
+      case process.env?.ASH_AUTH_TOKEN:
+          this.#auth = process.env?.ASH_AUTH_TOKEN;
+        break;
+      default:
+        this.#auth = `ash:${(Math.random() + 1).toString(16).substring(5)}`;
+        elevenLogJSON('WARNING', `no authentication was set! fall back to basic authentication with credentials [${this.#auth}]`);
+    }
+
     this.#app.express.use((req, res, next) => {
       if(req.headers?.authorization){
-        const authorization = req.headers?.authorization.split(' ');
-        if(Array.isArray(authorization) && authorization.length > 0){
-          const auth = Buffer.from(authorization[1], 'base64').toString().split(':');
-          if(this.#auth === auth.join(':')){
-            next();
-          }else{
-            res.status(403).end();
-          }
+        let authenticated = false;
+        switch(true){
+          case /Bearer \S+/i.test(req.headers.authorization):
+            if(process.env?.ASH_AUTH_TOKEN && req.headers.authorization.match(new RegExp(`Bearer ${this.#auth}`, 'i'))){
+              authenticated = true;
+            }
+          break;
+
+          default:
+            if(/Basic \S+/i.test(req.headers.authorization)){
+              if(req.headers.authorization.match(new RegExp(`Basic ${Buffer.from(this.#auth).toString('base64')}`, 'i'))){
+                authenticated = true;
+              }
+            }
+        }
+        if(authenticated){
+          next();
+        }else{
+          res.status(403).json({error:true, message:'authentication required'});
         }
       }else{
-        res.setHeader('WWW-Authenticate', 'Basic realm="express"').status(401).end();
+        res.setHeader('WWW-Authenticate', 'Basic realm="ash"').status(401).end();
       }
     });
   }
@@ -51,4 +75,4 @@ class NSUPDATE{
   }
 }
 
-new NSUPDATE().start();
+new Ash().start();

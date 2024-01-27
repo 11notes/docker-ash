@@ -1,8 +1,10 @@
 const { spawn } = require('node:child_process');
 
-exports.dig = async(cmd) => {
+exports.dig = async(commands) => {
   return(new Promise((resolve, reject) => {
-    const dig = spawn('/usr/bin/dig', ['+short', '+answer', cmd]);
+    const dig = spawn('/usr/bin/dig', (
+      (Array.isArray(commands) ? commands : commands.split(' '))
+    ));
     const io = {stdout:'', stderr:''};
     dig.stderr.on('data', data => {io.stderr += data.toString()});
     dig.stdout.on('data', data => {io.stdout += data.toString()});
@@ -15,7 +17,7 @@ exports.dig = async(cmd) => {
         if(io.stderr.length > 0){
           reject(io.stderr);
         }else{
-          resolve(io.stdout);
+          resolve(io.stdout.trim().split(/[\r\n]+/ig));
         }
       }else{
         reject(io.stderr);
