@@ -1,0 +1,11 @@
+image: 11notes/ash:latest
+manifests:
+  - image: 11notes/ash:amd64-latest
+    platform:
+      architecture: amd64
+      os: linux
+  - image: 11notes/ash:arm64v8-latest
+    platform:
+      architecture: arm64
+      os: linux
+      variant: v8

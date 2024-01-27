@@ -1,7 +1,7 @@
-# Alpine :: Ash Binaries
-![size](https://img.shields.io/docker/image-size/11notes/ash/amd64-0.1.0?color=0eb305) ![version](https://img.shields.io/docker/v/11notes/ash/amd64-0.1.0?color=eb7a09) ![pulls](https://img.shields.io/docker/pulls/11notes/ash?color=2b75d6) ![activity](https://img.shields.io/github/commit-activity/m/11notes/docker-ash?color=c91cb8) ![commit-last](https://img.shields.io/github/last-commit/11notes/docker-ash?color=c91cb8)
+# Alpine :: Binaries
+![size](https://img.shields.io/docker/image-size/11notes/ash/0.1.0?color=0eb305) ![version](https://img.shields.io/docker/v/11notes/ash/0.1.0?color=eb7a09) ![pulls](https://img.shields.io/docker/pulls/11notes/ash?color=2b75d6) ![activity](https://img.shields.io/github/commit-activity/m/11notes/docker-ash?color=c91cb8) ![commit-last](https://img.shields.io/github/last-commit/11notes/docker-ash?color=c91cb8)
 
-Run Ash Binaries based on Alpine Linux. Small, lightweight, secure and fast 🏔️
+Run Binaries based on Alpine Linux. Small, lightweight, secure and fast 🏔️
 
 ## Description
 What can I do with this? It will expose binaries via a simple web API, so you can use your favourite unix/linux binaries via curl.
