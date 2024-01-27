@@ -4,7 +4,7 @@
 Run Ash Binaries based on Alpine Linux. Small, lightweight, secure and fast 🏔️
 
 ## Description
-What can I do with this? It will expose binaries via web a simple web API, so you can use your favourite unix/linux binaries via curl.
+What can I do with this? It will expose binaries via a simple web API, so you can use your favourite unix/linux binaries via curl.
 
 ## Run
 ```shell
