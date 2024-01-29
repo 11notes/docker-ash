@@ -4,15 +4,11 @@ const express = require('express');
 const { elevenLogJSON } = require('/util');
 
 class Ash{
-  #auth;
+  #auth = null;
   #app;
 
   constructor(){
     this.#app = new Express();
-
-    this.#app.express.get('/ping', (req, res, next) =>{
-      res.status(200).end();
-    });
 
     switch(true){
       case process.env?.ASH_AUTH_BASIC:
@@ -21,13 +17,10 @@ class Ash{
       case process.env?.ASH_AUTH_TOKEN:
           this.#auth = process.env?.ASH_AUTH_TOKEN;
         break;
-      default:
-        this.#auth = `ash:${(Math.random() + 1).toString(16).substring(5)}`;
-        elevenLogJSON('WARNING', `no authentication was set! fall back to basic authentication with credentials [${this.#auth}]`);
     }
 
     this.#app.express.use((req, res, next) => {
-      if(req.headers?.authorization){
+      if(this.#auth && req.headers?.authorization){
         let authenticated = false;
         switch(true){
           case /Bearer \S+/i.test(req.headers.authorization):
@@ -48,8 +41,10 @@ class Ash{
         }else{
           res.status(403).json({error:true, message:'authentication required'});
         }
-      }else{
+      }else if(this.#auth){
         res.setHeader('WWW-Authenticate', 'Basic realm="ash"').status(401).end();
+      }else{
+        next();
       }
     });
   }

@@ -4,11 +4,12 @@
 Run Binaries based on Alpine Linux. Small, lightweight, secure and fast 🏔️
 
 ## Description
-What can I do with this? It will expose binaries via a simple web API, so you can use your favourite unix/linux binaries via curl.
+What can I do with this? It will expose binaries via a simple web API, so you can use your favourite unix/linux binaries via curl, all powered by musl!
 
 ## Run
 ```shell
 docker run --name ash \
+  -p 8443:8443/tcp \
   -d 11notes/ash:[tag]
 ```
 
@@ -19,7 +20,7 @@ docker run --name ash \
 | `uid` | 1000 | user id 1000 |
 | `gid` | 1000 | group id 1000 |
 | `home` | /node | home directory of user docker |
-| `api` | https://${IP}:8443 | HTTPS endpoint of Docker registry |
+| `api` | https://${IP}:8443 | HTTPS endpoint of express |
 
 ## Environment
 | Parameter | Value | Default |
